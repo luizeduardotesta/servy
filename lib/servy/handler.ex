@@ -32,6 +32,12 @@ defmodule Servy.Handler do
     %{conv | status: 200, resp_body: "Bear #{id}"}
   end
 
+  # name=Ballo&type=Brown
+  def route(%Conv{method: "GET", path: "/bears"} = conv)  do
+    %{conv | status: 201,
+             resp_body: "Created a #{conv.params["type"]} bear named #{conv.params["name"]}!"}
+  end
+
   def route(%Conv{method: "GET", path: "/about"} = conv)  do
       @pages_path
       |> Path.join("about.html")
@@ -95,7 +101,10 @@ GET /Bears/1 HTTP/1.1
 Host: exemple.com
 User-Agent: ExampleBrowser/1.0
 Accept: */*
+Content-Type: application/x-www-from-urlencoded
+Content-Lenght: 21
 
+name=Ballo&type=Brown
 """
 
 response = Servy.Handler.handler(request)
